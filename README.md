@@ -1,5 +1,4 @@
-# 4641_Group
-
+# Air Quality Index Prediction
 ## Project Setup
 
 ### Kaggle 
