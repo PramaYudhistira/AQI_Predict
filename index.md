@@ -310,5 +310,3 @@ Link: https://gtvault-my.sharepoint.com/:x:/g/personal/mzahid30_gatech_edu/EZVyC
 | Serhan      | Methods, Results, Presentation    |
 | Hamza       | Methods and Presentation          |   
 | Prama       | Methods, Results, Presentation    |
-| Zuhair      | Results, Discussion, Presentation |
-| Hamzah      | Report, Gantt chart, Presentation |
