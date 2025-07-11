@@ -25,3 +25,10 @@
 `Midterm/notebook`: Directory includes all testing files for just seeing what works
 
 `Midterm/model1.ipynb`: Our final submission, using Random Forest Regression
+
+`Midterm/xgboost.ipynb`: model 2 for our final report
+
+`Midterm/LSTM.ipynb.ipynb`: model 3 for our final report
+
+All the models are run the sameway, you have to download the dataset and run the notebook
+

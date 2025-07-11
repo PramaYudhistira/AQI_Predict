@@ -154,7 +154,139 @@ Fir midterm, we decided to go with  **Random Forest Regression** model to estima
 - **Other Algorithms:**  
   Also we will be using other algorithms such as **LSTM** or **XGBoost** as they may have better overall performance.
 
+# Final Report (LSTM and XG boost)
+## LSTM (Long short term memory)
 
+### 1. Data Exploration  
+- **Dataset size using the same Beijing dataset that has:** ~9.6 million hourly records (2013–2017).  
+- **observations:**  
+  - Year/month/day/hour are uniformly represented (heatmap shows no missing time slots).  
+  - Temperature, pressure, and dew point show clear seasonal patterns.  
+- **Figures to include:**  
+  - filled the missing values using forward/backward fill so there are no missing values before we train it on LSTM
+<img width="501" alt="image" src="https://github.gatech.edu/pyudhistira3/4641_Group/assets/71546/1883b5d9-1fc5-4cde-be4e-76783752456d">
+
+  - Feature correlation matrix  
+  This shows that gases are correlated to each other while the other features are not that highly correlated
+<img width="474" alt="image" src="https://github.gatech.edu/pyudhistira3/4641_Group/assets/71546/bc4c0ec1-72ea-4e3b-afeb-332bf94b680f">
+
+
+---
+
+### 2. Preprocessing & Feature Engineering  
+1. **Missing values:** As mentioned before used forward/backward fill to fill in the missing values
+2. **Temporal encodings:**  
+   - `dow_sin`/`dow_cos` (day-of-week)  
+   - `month_sin`/`month_cos`  
+   - `hour_sin`/`hour_cos`  
+3. **Log transforms:** Used log transofrmation to reduce the skew of PM2.5, PM10, CO, O3  
+4. **Rolling statistics & lags:**  
+   - 6- and 24-hour rolling mean/std of PM2.5  
+   - PM2.5 lag features at 1, 3, 6, 12 hours  
+5. **Normalization:** Used MinMax scaling on all features as normalization mostly makes the model work better  
+<img width="327" alt="image" src="https://github.gatech.edu/pyudhistira3/4641_Group/assets/71546/642f89a2-af0f-4f4e-a8f0-85e4d8999a82">
+<img width="596" alt="image" src="https://github.gatech.edu/pyudhistira3/4641_Group/assets/71546/66890e91-5998-4c62-aaa9-392b3f707a09">
+
+
+---
+
+### 3. Model Architecture  
+- We used a sliding window of 48 consecutive hours (two days lookback). Each window was put in the two layer LSTM model. The first layer had 64 units, we also applied L2 regularization and 20% dropout rate to reduce overfitting. The output of this was fed to the second layer with 32 units with the same dropout and regularization. This condensed into a single feature vector. Finally, in the end we put a dense layer with one neuron and linear activation to get the prediction. We used Adam optimizer with learning rate of 0.003 and metrics we set were MAE and R². We also had early stopping, in case when validation loss did not improved for 10 epochs. 
+
+
+---
+
+### 4. Training & Validation  
+- We split the data into 80% for training and the remaining 20% for testing. Training was done in batches of 64 windows. The result shows that there was rapid convergence in the start and after a few epochs, it was stable generalization. This showed that we prevent overfitting as well. 
+<img width="597" alt="image" src="https://github.gatech.edu/pyudhistira3/4641_Group/assets/71546/b357416a-8821-4149-a4a0-4115d4501bfa">
+
+
+---
+
+### 5. Performance
+- **MAE:** 0.0232  
+- **RMSE:** 0.0357  
+- **R²:** 0.8216  
+<img width="570" alt="image" src="https://github.gatech.edu/pyudhistira3/4641_Group/assets/71546/62c2a2f5-749a-4d33-bf27-818f508fb9a7">
+<img width="592" alt="image" src="https://github.gatech.edu/pyudhistira3/4641_Group/assets/71546/c707c219-69fb-43f0-a94f-1fd04210325e">
+<img width="479" alt="image" src="https://github.gatech.edu/pyudhistira3/4641_Group/assets/71546/93824f8e-f032-4f3b-b0a0-d0b810d4a5d9">
+
+---
+
+### 6. Discussion & Insights  
+- We were able to capture multi-day pollution cycles (high R²)
+- Although our model underpredicts sharp AQI spikes, residual distribution shows slight skew at high levels. 
+- **Feature insights:** PM2.5, NO₂, PM10 are most correlated with target; weather features add seasonal context.
+
+---
+
+### 7. Next Steps  
+1. **Hyperparameter tuning:** grid search on layer sizes, learning rate, lookback length.  
+2. **Model variants:** test Temporal Convolutional Networks or Attention-based RNNs.  
+3. **External data:** integrate traffic counts, satellite aerosol optical depth.  
+4. **Multi-step forecasting:** extend to 24- and 72-hour ahead predictions.
+
+## XGBoost (Extreme Gradient Boosting)
+
+### 1. Data Exploration  
+- **Dataset**: Beijing Multi-Site Air Quality Data (2013–2017)  
+- **Shape after cleaning**: Daily-aggregated dataset with pollutants + weather features  
+- **Observations**:  
+  - Time coverage is complete (no missing days after aggregation)  
+  - PM2.5 and PM10 highly correlated  
+  - Seasonal trends present in weather variables  
+
+---
+
+### 2. Preprocessing & Feature Engineering  
+1. **Missing values**:  
+   - Dropped rows with missing target `PM2.5`  
+   - No other imputation necessary due to aggregation  
+2. **Temporal features**:  
+   - Created sin/cos encodings for hour and month cycles  
+   - Added a 1-day lag of PM2.5 (`PM2.5_lag1`)  
+3. **Categorical encoding**:  
+   - One-hot encoded `wind direction` (`wd`) and `station`  
+4. **Final feature list** included pollutants, weather, and time encodings (no dimensionality reduction)  
+
+---
+
+### 3. Model Training  
+- Used `xgb.train()` with early stopping (stopped at optimal round to avoid overfitting)  
+- Hyperparameters tuned with `RandomizedSearchCV` (20 trials, 3-fold CV)  
+- Final model was refit using the best parameters and full training set  
+
+---
+
+### 4. Performance  
+- **Final MAE**: 4.47 µg/m³  
+- **Final RMSE**: 6.80 µg/m³  
+- **Final R²**: 0.993  
+
+---
+
+### 5. Visualizations  
+- **Predicted vs Actual PM2.5**  
+![alt text](image-1.png)
+
+- **Residuals distribution**
+![alt text](image-2.png)
+
+
+### 6. Discussion & Insights  
+- XGBoost achieved near-perfect fit on the test set.  
+- Strong correlation between predicted and actual PM2.5, with low variance in residuals.  
+- Model underpredicts slightly at very high PM2.5 levels (as seen in scatter plot).  
+- **Top features**: PM10, NO₂, TEMP — strong indicators of pollution dynamics.  
+- XGBoost handles missing values and nonlinear interactions internally — no imputation logic needed.  
+
+---
+
+### 7. Next Steps  
+1. Compare with LSTM & Random Forest under same preprocessing  
+2. Ensemble XGBoost + LSTM for sequence + tabular modeling  
+3. Deploy live pipeline for daily PM2.5 forecasting  
+4. Incorporate spatial data (e.g., station locations, satellite data) to improve general
 
 ## References
 
@@ -173,10 +305,10 @@ Link: https://gtvault-my.sharepoint.com/:x:/g/personal/mzahid30_gatech_edu/EZVyC
 
 ## Contribution Table
 
-| Member Name | Contribution          |
-|-------------|-----------------------|
-| Serhan      | Methods and Results  |
-| Hamza       | Methods |
-| Prama       | Methods and Results |
-| Zuhair      | Results and Discussion  |
-| Hamzah      | Report and Gantt chart |
+| Member Name | Contribution                      |
+|-------------|-----------------------------------|
+| Serhan      | Methods, Results, Presentation    |
+| Hamza       | Methods and Presentation          |   
+| Prama       | Methods, Results, Presentation    |
+| Zuhair      | Results, Discussion, Presentation |
+| Hamzah      | Report, Gantt chart, Presentation |
