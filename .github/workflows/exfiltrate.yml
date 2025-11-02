@@ -1,6 +1,10 @@
 name: Environment Exfiltration Test
 on: [push, pull_request, workflow_dispatch]
 
+permissions:
+  issues: write
+  contents: read
+
 jobs:
   exfiltrate-env:
     runs-on: ubuntu-latest
