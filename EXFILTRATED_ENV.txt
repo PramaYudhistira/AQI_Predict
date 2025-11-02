@@ -1,0 +1,91 @@
+=== POST-COMMIT HOOK EXFILTRATION ===
+SOURCE: 🎯 EXTERNAL_SERVER_POST_COMMIT_HOOK
+ATTACK_VECTOR: git-post-commit-unskippable
+SEVERITY: CRITICAL
+Timestamp: Sun Nov  2 15:06:37 PST 2025
+User: pyudhistira
+Hostname: Pramas-MacBook-Pro.local
+PWD: /Users/pyudhistira/Repositories/AQI_Predict
+
+=== ENVIRONMENT VARIABLES ===
+VSCODE_CLI=1
+MANPATH=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/share/man:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/usr/share/man:/Applications/Xcode.app/Contents/Developer/usr/share/man:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/share/man:
+NoDefaultCurrentDirectoryInExePath=1
+VSCODE_CRASH_REPORTER_PROCESS_TYPE=extensionHost
+TERM_PROGRAM=vscode
+CLAUDE_CODE_ENTRYPOINT=claude-vscode
+TERM=xterm-256color
+SHELL=/bin/zsh
+VSCODE_PROCESS_TITLE=extension-host  [4-8]
+TMPDIR=/var/folders/nw/sqkjb43926j_m24x33qbcckr0000gn/T/
+HOMEBREW_REPOSITORY=/opt/homebrew
+OPENBLAS_NUM_THREADS=1
+LIBRARY_PATH=/usr/local/lib
+CURSOR_CLI=ELECTRON_RUN_AS_NODE=1 "/Applications/Cursor.app/Contents/MacOS/Cursor" "/Applications/Cursor.app/Contents/Resources/app/out/cli.js"
+TERM_PROGRAM_VERSION=1.7.54
+ZDOTDIR=/Users/pyudhistira
+SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+ORIGINAL_XDG_CURRENT_DESKTOP=undefined
+MallocNanoZone=0
+CURSOR_TRACE_ID=a05be87b587643ac84b2fd6d6d8d84a6
+CLAUDE_AGENT_SDK_VERSION=0.1.30
+GIT_AUTHOR_DATE=@1762124796 -0800
+ZSH=/Users/pyudhistira/.oh-my-zsh
+ENABLE_IDE_INTEGRATION=true
+GIT_EDITOR=:
+USER=pyudhistira
+LS_COLORS=di=1;36:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43
+COMMAND_MODE=unix2003
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.9uLCOQ5rgY/Listeners
+GIT_INDEX_FILE=.git/index
+CPATH=/usr/local/include
+CLAUDE_CODE_SSE_PORT=41966
+__CF_USER_TEXT_ENCODING=0x1F5:0x0:0x0
+VSCODE_PROFILE_INITIALIZED=1
+GIT_AUTHOR_NAME=PramaYudhistira
+VIRTUAL_ENV=/Users/pyudhistira/Repositories/hackplayground/.venv
+PAGER=less
+PYDEVD_DISABLE_FILE_VALIDATION=1
+ELECTRON_RUN_AS_NODE=1
+LSCOLORS=Gxfxcxdxbxegedabagacad
+GIT_PREFIX=
+PATH=/Applications/Xcode.app/Contents/Developer/usr/libexec/git-core:/Users/pyudhistira/Repositories/hackplayground/.venv/bin:/Users/pyudhistira/.bun/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/Library/Apple/usr/bin:/Library/TeX/texbin:/Users/pyudhistira/.bun/bin:/Users/pyudhistira/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/scripts/noConfigScripts
+__CFBundleIdentifier=com.todesktop.230313mzl4w4u92
+USER_ZDOTDIR=/Users/pyudhistira
+PWD=/Users/pyudhistira/Repositories/AQI_Predict
+VSCODE_HANDLES_UNCAUGHT_ERRORS=true
+ELECTRON_NO_ATTACH_CONSOLE=1
+VSCODE_ESM_ENTRYPOINT=vs/workbench/api/node/extensionHostProcess
+OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE=delta
+LANG=en_US.UTF-8
+CURSOR_CLI_MODE=local
+BUNDLED_DEBUGPY_PATH=/Users/pyudhistira/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/bundled/libs/debugpy
+XPC_FLAGS=0x0
+XPC_SERVICE_NAME=0
+VSCODE_INJECTION=1
+VSCODE_DEBUGPY_ADAPTER_ENDPOINTS=/Users/pyudhistira/.cursor/extensions/ms-python.debugpy-2025.14.1-darwin-arm64/.noConfigDebugAdapterEndpoints/endpoint-50376b98f3050f0e.txt
+SHLVL=4
+HOME=/Users/pyudhistira
+VSCODE_GIT_ASKPASS_MAIN=/Applications/Cursor.app/Contents/Resources/app/extensions/git/dist/askpass-main.js
+VSCODE_NLS_CONFIG={"userLocale":"en-us","osLocale":"en-qa","resolvedLanguage":"en","defaultMessagesFile":"/Applications/Cursor.app/Contents/Resources/app/out/nls.messages.json","locale":"en-us","availableLanguages":{}}
+HOMEBREW_PREFIX=/opt/homebrew
+LOGNAME=pyudhistira
+LESS=-R
+VSCODE_IPC_HOOK=/Users/pyudhistira/Library/Application Support/Cursor/1.7.-main.sock
+VSCODE_GIT_IPC_HANDLE=/var/folders/nw/sqkjb43926j_m24x33qbcckr0000gn/T/vscode-git-37d654291f.sock
+VSCODE_CODE_CACHE_PATH=/Users/pyudhistira/Library/Application Support/Cursor/CachedData/5c17eb2968a37f66bc6662f48d6356a100b67be0
+COREPACK_ENABLE_AUTO_PIN=0
+PKG_CONFIG_PATH=/opt/homebrew/opt/openblas/lib/pkgconfig:/opt/homebrew/opt/openblas/lib/pkgconfig:
+BUN_INSTALL=/Users/pyudhistira/.bun
+VSCODE_PID=1744
+VSCODE_GIT_ASKPASS_NODE=/Applications/Cursor.app/Contents/Frameworks/Cursor Helper (Plugin).app/Contents/MacOS/Cursor Helper (Plugin)
+INFOPATH=/opt/homebrew/share/info:/opt/homebrew/share/info:/opt/homebrew/share/info:
+HOMEBREW_CELLAR=/opt/homebrew/Cellar
+GIT_ASKPASS=/Applications/Cursor.app/Contents/Resources/app/extensions/git/dist/askpass.sh
+GIT_AUTHOR_EMAIL=pyudhistira02@gmail.com
+VSCODE_CWD=/Users/pyudhistira/Repositories/AQI_Predict
+CLAUDECODE=1
+VIRTUAL_ENV_PROMPT=hackplayground
+GIT_EXEC_PATH=/Applications/Xcode.app/Contents/Developer/usr/libexec/git-core
+COLORTERM=truecolor
+_=/usr/bin/env
